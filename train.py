@@ -104,8 +104,13 @@ def main():
     model = RandomForestRegressor(max_depth=args.max_Depth,n_estimators=args.n_estimators, criterion=args.criterion, ,max_features = args.max_Features) # , random_state=0)
     model.fit(x_train, y_train)
 
-    accuracy = model.score(x_test, y_test)
-    run.log("accuracy", np.float(accuracy))
+    y_pred = model.predict(x_test)
+    
+    r2_score = r2_score(y_true=y_test,y_pred=y_pred)
+    run.log("r2_score", np.float(r2_score))
+    
+#     run.log("accuracy", np.float(accuracy))
+#     accuracy = model.score(x_test, y_test)
     
     os.makedirs(args.output_dir, exist_ok=True)
     joblib.dump(value=model, filename=f'{args.output_dir}/model/RF-AutoPrices_hdrive_model.joblib')
