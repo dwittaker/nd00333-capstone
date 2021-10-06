@@ -1,5 +1,6 @@
 import argparse
 import os
+import json
 import numpy as np
 import joblib
 import pandas as pd
@@ -12,7 +13,8 @@ from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 
 
-from azureml.core.run import Dataset, Run
+from azureml.core.run import Run
+from azureml.core.dataset import Dataset
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -31,6 +33,8 @@ args = parser.parse_args()
 
 # file_data = "Data/ca-dealers-used.csv"
 # ds = pd.read_csv(args.data_file_path)
+
+run = Run.get_context()
 ws = run.experiment.workspace
 # get the input dataset by ID
 dataset = Dataset.get_by_name(ws, name=args.input_data)
@@ -38,6 +42,14 @@ dataset = Dataset.get_by_name(ws, name=args.input_data)
 # load the TabularDataset to pandas DataFrame
 ds = dataset.to_pandas_dataframe()
 
+def correlation_map(x,y):
+    df_corr = x.copy()
+    x['price'] = y
+    correlations = x.corr()
+
+    indx=correlations.index
+    plt.figure(figsize=(20,15))
+    sns.heatmap(x[indx].corr(),annot=True,cmap="YlGnBu")
 
 def clean_data(df_data):
     #https://pbpython.com/categorical-encoding.html
@@ -52,7 +64,7 @@ def clean_data(df_data):
     df_data.loc[df_data['fuel_type'].isin(['Biodiesel','Diesel']),'fuel_type'] = 'Diesel'
     df_data.loc[df_data['fuel_type'].isin(['E85','Unleaded','Premium Unleaded','Premium Unleaded; Unleaded']),'fuel_type'] = 'Gas'
 
-    df_data.drop(columns=['id','vin','stock_no','trim','seller_name','street','city','zip'],inplace=True)
+    df_data.drop(columns=['id','vin','stock_no','trim','engine_block','seller_name','street','city','zip'],inplace=True)
     dict_colmap = {}
     lst_objcolumns = list(df_data.select_dtypes(include=['object']).columns)
     
@@ -75,22 +87,15 @@ x, y, dct_cols = clean_data(ds)
 with open('dict_colmap.txt', 'w') as outfile:
     json.dump(dct_cols, outfile)
 
-correlation_map(x,y)
+# correlation_map(x,y)
 
 
 x = preprocessing.StandardScaler().fit(x).transform(x.astype(float))
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.95, test_size = 0.05, random_state=1)
 
-run = Run.get_context()
+# run = Run.get_context()
 
-def correlation_map(x,y):
-    df_corr = x.copy()
-    x['price'] = y
-    correlations = x.corr()
 
-    indx=correlations.index
-    plt.figure(figsize=(20,15))
-    sns.heatmap(x[indx].corr(),annot=True,cmap="YlGnBu")
 
 
 def main():
@@ -101,19 +106,20 @@ def main():
     run.log("Criterion", args.criterion)
     run.log("Max Features", args.max_Features)
 
-    model = RandomForestRegressor(max_depth=args.max_Depth,n_estimators=args.n_estimators, criterion=args.criterion, ,max_features = args.max_Features) # , random_state=0)
+    model = RandomForestRegressor(max_depth=args.max_Depth,n_estimators=args.n_estimators, criterion=args.criterion, max_features = args.max_Features) # , random_state=0)
     model.fit(x_train, y_train)
 
     y_pred = model.predict(x_test)
     
-    r2_score = r2_score(y_true=y_test,y_pred=y_pred)
-    run.log("r2_score", np.float(r2_score))
+    r2_score_result = r2_score(y_true=y_test,y_pred=y_pred)
+    run.log("r2_score", np.float(r2_score_result))
     
 #     run.log("accuracy", np.float(accuracy))
 #     accuracy = model.score(x_test, y_test)
-    
-    os.makedirs(args.output_dir, exist_ok=True)
-    joblib.dump(value=model, filename=f'{args.output_dir}/model/RF-AutoPrices_hdrive_model.joblib')
+    folderpath = f'{args.output_dir}/model'
+    os.makedirs(folderpath, exist_ok=True)
+
+    joblib.dump(value=model, filename=f'{folderpath}/RF-AutoPrices_hdrive_model.joblib')
 
 
 if __name__ == '__main__':
