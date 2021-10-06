@@ -1,8 +1,0 @@
-dependencies:
-  - python=3.9.1
-  - scikit-learn
-  - numpy
-  - pandas
-  - joblib
-  - pip:
-    - azureml-defaults
