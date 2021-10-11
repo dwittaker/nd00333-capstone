@@ -22,7 +22,8 @@ The project’s activities are performed in four phases, including:
 1.	Identification, exploration and use of a suitable dataset (external to Azure) of interest
 2.	Use of Azure’s AutoML tool to automatically perform training experiments and produce an optimal model
 3.	Use of Azure’s HyperDrive tool to perform hyperparameter tuning experiments and produce an optimal model
-4.	Deployment of the most optimal model (considering both experiments above) for consumption as an inference web service.
+4.	Deployment of the most optimal model (considering both experiments above) for consumption as an inference web service. 
+NB: Step 4 was done in a separate hyperparameter_tuning_deploy.ipynb workbook
 
 ## Screen Recording
 [Top](#table-of-contents)
