@@ -1,4 +1,6 @@
-# Table of Contents
+# Prediction of Used Motor Vehicle Prices
+
+## Table of Contents
 - [Overview](#overview)
 - [Screencast](#screen-recording)
 - [Process Flow](#process-flow-diagram)
@@ -11,10 +13,8 @@
 - [Improving the Project in the Future](#improving-the-project-in-the-future)
 
 
-# Prediction of Used Motor Vehicle Prices
-
 ## Overview
-
+[Top](#table-of-contents)
 In this project I use Azure’s Machine Learning services for the development (and deployment) of a model that can predict the prices of used motor vehicles in Canada (regression). This is based on the characteristics of the motor vehicles, their sellers and their locations.
 
 The project’s activities are performed in four phases, including:
@@ -24,14 +24,17 @@ The project’s activities are performed in four phases, including:
 4.	Deployment of the most optimal model (considering both experiments above) for consumption as an inference web service.
 
 ## Screen Recording
+[Top](#table-of-contents)
 
 [![here](https://img.youtube.com/vi/2RdAcl6C6bg/mqdefault.jpg)](https://youtu.be/2RdAcl6C6bg)
 
 ## Process Flow Diagram
+[Top](#table-of-contents)
 
 ![Process Diagram](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCAP_ML_Architecture.png)
 
 ## Project Set Up and Installation
+[Top](#table-of-contents)
 
 ### Packages
 This is a general AzureML project and uses several different Azure and Azure ML SDK libraries, along with basic data processing libraries such as Pandas and Numpy and general Machine Learning libraries such as SciKitLearn.
@@ -57,6 +60,7 @@ For the purpose of running training activities in parallel, a compute cluster is
 
 
 ## Dataset
+[Top](#table-of-contents)
 
 ### Overview
 To get things started, several datasets on Kaggle were reviewed for interest, usability, data quality and suitability in relation to the ultimate purpose. With that said, I settled on a [used car listings dataset](https://www.kaggle.com/rupeshraundal/marketcheck-automotive-data-us-canada) (credit: [MarketCheck.com](https://www.marketcheck.com/)) which provides data for cars being sold on the US and Canadian markets. This data is scraped from 65k used car sales websites across North America. Given my location and personal interest, I chose to use the Canadian portion of that dataset. 
@@ -75,6 +79,8 @@ The registered dataset in AzureML Studio
 
 
 ## Hyperparameter Tuning
+[Top](#table-of-contents)
+
 As part of the HyperDrive experiment’s training script, the data was cleaned to some extent. It was also encoded, split and standardized, for use in training. This preparation exercise was informed by review of the raw data features and their correlations, using a correlation map. 
 
 <img src="https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_45.jpg" alt="Correlation Map" width="75%" height="75%">
@@ -124,6 +130,8 @@ Without a doubt, the model could have been improved with more in-depth data prep
 
 
 ## Automated ML
+[Top](#table-of-contents)
+
 The AutoML Experiment was configured to run a regression experiment on the raw data where the price column is to be predicted based on the other columns. Featurization was enabled, allowing AutoML to autonomously perform data preparation steps including developing its own features for use along with the raw features.
 
 For timing, the experiment was set to run with 5 concurrent iteration runs for 15* minutes overall with an individual iteration timeout of 10 minutes and with early stopping enabled. The early stopping iterations was limited to 5 to stop the experiment if only 5 iterations failed to improve on the score. This was done bearing in mind that AzureML's early stopping feature starts calculating after the first 20 iterations by default. Therefore, 25 experiments is the earliest time at which the experiment would be terminated early, albeit with 2 additional ensemble iterations being subsequently added.
@@ -179,6 +187,7 @@ In general, XGBoost is one of the better performing algorithms available for reg
 
 
 ## Model Deployment
+[Top](#table-of-contents)
 
 ### Metric
 The models from both experiments were evaluated based on R2 score, which was chosen as the primary metric after analysis of the spread of target variable values in the dataset. As noted by Microsoft’s [documentation](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-auto-train#metrics-for-regression-scenarios):
@@ -276,6 +285,7 @@ Testing the Endpoint with sample data
 
 
 ## Standout Suggestions
+[Top](#table-of-contents)
 
 App Insights was enabled for the deployed web service. This allows the administrator to monitor the web service's performance, its availability and any other information that is desired surrounding the use of the service. 
 
