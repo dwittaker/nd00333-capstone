@@ -27,8 +27,8 @@ NB: Step 4 was done in a separate hyperparameter_tuning_deploy.ipynb workbook
 
 ## Screen Recording
 [Top](#table-of-contents)
-NB: The volume level seems to reduce briefly a couple of times
-[![here](https://img.youtube.com/vi/2RdAcl6C6bg/mqdefault.jpg)](https://youtu.be/2RdAcl6C6bg)
+
+[![here](https://img.youtube.com/vi/UmdZ3zIsPjw/mqdefault.jpg)](https://youtu.be/UmdZ3zIsPjw)
 
 ## Process Flow Diagram
 [Top](#table-of-contents)
@@ -74,10 +74,10 @@ The car sales data will be used to try and predict the prices of used cars in Ca
 Using the Kaggle API, the data was downloaded locally using the opendatasets library which only requires a Kaggle username and key for authentication. Using the Azure SDK, it was then uploaded to the default datastore and converted to a tabular dataset which was then registered in the workspace. This allowed the data to be accessible from all experiments.
 
 Print out of the data being downloaded in the notebook
-![Accessing the Data](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_01.png)
+![Accessing the Data](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_01_new.png)
 
 The registered dataset in AzureML Studio
-![The Registered Dataset](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_02.png)
+![The Registered Dataset](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_02_new.png)
 
 
 ## Hyperparameter Tuning
@@ -106,25 +106,25 @@ Max Depth: 30
 Criterion: mse
 Max Features: log2
 
-The RunWidget below shows the HyperDrive experiment in its final stages, as noted by the logs in the top right corner. The table at the bottom is sorted to show the best metrics produced along with some of the parameters used.
-![HyperDrive RunWidget](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_07.png)
+The RunWidget below shows the completed HyperDrive experiment, as noted by the logs in the top right corner. The table at the bottom is sorted to show the best metrics produced along with some of the parameters used.
+![HyperDrive RunWidget](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_07_new.png)
 
 The experiment's view in ML Studio shows a better list of the runs with their metrics and the parameters used.
-![HyperDrive RunWidget](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_11.png)
+![HyperDrive RunWidget](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_11_new.png)
 
 The completed experiment showing the range of parameters used for Bayesian optimization
-![HyperDrive RunWidget](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_12.png)
+![HyperDrive RunWidget](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_12_new.png)
 
 A graphical representation portraying the parameter settings in use along with the produced R2 score. This provides a good idea of the more useful hyperparameter settings, such as using mse with higher max depth.
-![Parallel Coordinate](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_10.png)
+![Parallel Coordinate](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_10_new.png)
 
 The Best Run was retrieved from the HyperDrive experiment and used to display the associated (best) model's parameters and other properties
-![Getting the Best Run](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_13.png)
-![Best Run Parameters](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_14.png)
+![Getting the Best Run](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_13_new.png)
+![Best Run Parameters](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_14_new.png)
 
 The best model is downloaded and the Model's details are printed
 
-![Best Model Download and Model Properties](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_15.png)
+![Best Model Download and Model Properties](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_15_new.png)
 
 ### Future Improvements
 
@@ -201,15 +201,15 @@ As such, the R2 score metric is applicable given the spread of car prices in the
 ### Registering the Model
 Based on the scoring metrics of the AutoML and HyperDrive experiments, the best model was taken from the latter experiment for deployment as a web service. The model was then registered.
 
-![Register Model](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_16.png)
+![Register Model](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_16_new.png)
 
 The registered model in AzureML Studio
 
-![Registered Model](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_17.png)
+![Registered Model](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_17_new.png)
 
 The model file stored as an artifact
 
-![Model File Artifact](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_18.png)
+![Model File Artifact](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_18_new.png)
 
 ### Setup
 As the deployed model will run from within a container that operates as a web server, we must provide:
@@ -224,7 +224,26 @@ Finally, authentication was enabled, thereby requiring a key for interaction wit
 ** While 1gb of memory is usually sufficient in most cases, the size of the fitted model's joblib file was over 1gb in size. Specifying 1gb memory for the container caused the container to continually reboot (due to low memory), resulting in failed deployments and otherwise, an unhealthy web service. If a web service's deployment logs fail to provide useful or timely information (e.g. while awaiting container start), a deployment can be troubleshooted locally or via the Container instances section of the Azure portal, where one can review the logs associated with the container. Observing multiple instances of text similar to "Worker with pid XXX was terminated due to signal 9" suggests an out-of-memory problem, which manifests as continous reboots of the container.
 
 Checking the state of the deployment, retrieving the urls and keys and enabling app insight
-![Service State](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_23.png)
+
+![Service State in Python](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_23_new.png)
+
+Checking the state of the Web Service deployment and the AppInsights deployment in AzureML Studio
+
+![Service State in ML Studio](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_19_new.png)
+
+![AppInsights State in ML Studio](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_19_new_2.png)
+
+Initial logs from the Web Service and the Container, just prior to AppInsights deployment
+
+![Initial WebService Logs](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_20_new.png)
+![Initial Container Logs](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_22_new.png)
+
+Container configuration variables
+
+![Initial Container Config](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_22_new_2.png)
+
+Container logs just after AppInsights deployment
+![Container Logs after AppInsight Enabled](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_22_new_3.png)
 
 ### Usage
 
@@ -253,15 +272,15 @@ data = {
         {
             'miles': "58900",
             'year': "2018",
-            'make': "Toyota",
-            'model': "Corolla",
-            'engine_size': "1.8",
+            'make': "Honda",
+            'model': "Accord",
+            'engine_size': "2",
             'body_type': "Sedan",
             'vehicle_type': "Car",
             'drivetrain': "FWD",
             'transmission': "Automatic",
-            'fuel_type': "Gas",
-            'state': "AB"
+            'fuel_type': "Hybrid",
+            'state': "ON"
         }       
     ]
 }
@@ -278,24 +297,18 @@ print(resp.text)
 ```
 
 
-Retrieving Service Logs
-
-![Service Logs](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_24.png)
-
-
 Testing the Endpoint with sample data
 
-![Service Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_25.png)
+![Service Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_25_new.png)
 
-These 2 screenshots were captured from the Screencast as the latest Notebook may have been lost.
+Retrieving Service Logs with logged input and output from test
+Also viewable in AppInsights, described in the next section
 
-Service Logs with logged input and output from screencast test
-
-![Service Logs after Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_46_2.png)
+![Service Logs after test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_24_new.png)
 
 Deleting the Service 
 
-![Service Logs after Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_47_2.png)
+![Service Logs after Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_47_new.png)
 
 
 ## Standout Suggestions
@@ -308,10 +321,17 @@ In this instance, the entry script was modified to log relevant information upon
 While it was only monitored by pulling the logs directly in python, Azure's AppInsights interface allows us to review the performance, failures, availability and other issues from a graphical user interface. That interface also allows us to [directly monitor](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-enable-app-insights#view-logs-in-the-studio) any elements logged in the entry script via the tool's traces table under the logs option. 
 
 Overview page of the App Insights User Interface
-![App Insight Overview](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_26.png)
+
+![App Insight Overview](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_26_new.png)
 
 Performance page of the App Insights Tool after a few tests
-![App Insights Performance Page](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_27.png)
+
+![App Insights Performance Page](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_27_new.png)
+
+In-Depth Logging via Traces section
+
+![App Insights Traces](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_27_new_2.png)
+![App Insights Traces](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_27_new_3.png)
 
 
 ## Improving the Project in the Future
