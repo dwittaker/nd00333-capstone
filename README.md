@@ -33,39 +33,26 @@ The car sales data will be used to try and predict the prices of used cars in Ca
 Using the Kaggle API, the data was downloaded locally using the opendatasets library which only requires a Kaggle username and key for authentication. Using the Azure SDK, it was then uploaded to the default datastore and converted to a tabular dataset which was then registered in the workspace. This allowed the data to be accessible from all experiments.
 
 ## Automated ML
-The AutoML Experiment was configured to run a regression experiment on the raw data with featurization enabled. Featurization allows AutoML to autonomously perform data preparation steps and develop its own features for use along with the raw features.
+The AutoML Experiment was configured to run a regression experiment on the raw data where the price column is to be predicted based on the other columns. Featurization was enabled, allowing AutoML to autonomously perform data preparation steps including developing its own features for use along with the raw features.
 
 For timing, the experiment was set to run with 5 concurrent iteration runs for 15* minutes overall with an individual iteration timeout of 10 minutes and with early stopping enabled. The early stopping iterations was limited to 5 to stop the experiment if only 5 iterations failed to improve on the score. This was done bearing in mind that AzureML's early stopping feature starts calculating after the first 20 iterations by default. Therefore, 25 experiments is the earliest time at which the experiment would be terminated early, albeit with 2 additional ensemble iterations being subsequently added.
 
-5 fold cross validation was used to evaluate the results of the iterations and model explainability was enabled for the best model. This was used to get a better understanding of the important raw and engineered features.
+5-fold cross-validation was used to evaluate the results of the iterations and model explainability was enabled for the best model. This was used to get a better understanding of the more important features, whether raw or engineered.
 
 * In reality, the experiment was previously run for an hour a few times, which was later deemed unnecessary (The HyperDrive experiment always yielded better results).
 
-Further, it was only allowed to use shallow models (non-deep-learning). 
-automl_settings = {
-    "experiment_timeout_hours": 0.25,
-    "iteration_timeout_minutes":10,
-    "enable_early_stopping": True,
-    "early_stopping_n_iters": 5,
-    "max_concurrent_iterations": 5,
-    "primary_metric" : 'r2_score',
-    "verbosity": logging.INFO,
-    "n_cross_validations": 5,
-    "featurization":'auto',
-    "model_explainability":True
-
-automl_config = AutoMLConfig(
-    compute_target=compute_target,
-    task = "regression",
-    training_data=dataset,
-    label_column_name="price",  
-    debug_log = "automl_errors.log",
-    **automl_settings
-
-
 ### Results
-It eventually topped out at ~92% R2 score.
-*TODO*: What are the results you got with your automated ML model? What were the parameters of the model? How could you have improved it?
+The AutoML experimented completed around 11 iterations with the best, a stack ensemble, topping out at ~92.6% R2 score. This ensemble was comprised of a XGBoostRegressor that was preprocessed using a standard scaler and a LightGBMRegressor that was preprocessed using a max absolute scaler. 
+
+For the XGBoost algorithm, the parameters included:
+- Number of estimators: 100
+- Learning rate: 0.1
+- Max depth: 9
+For the LightGBM algorithm, the only noted parameters included:
+- Minimum data in leaf: 20
+- Number of jobs (threads): 1
+
+In general, XGBoost is one of the best performing algorithms available for regression. Aside from running a much longer experiment involving more rigorous hyperparameter tuning, it is probably safe to assume that manually cleaning and feature selecting/engineering the data would have produced a much better result.
 
 *TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
 
