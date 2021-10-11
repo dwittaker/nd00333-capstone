@@ -181,3 +181,15 @@ In this instance, the entry script was modified to log relevant information upon
 While it was only monitored by pulling the logs directly in python, Azure's AppInsights interface allows us to review the performance, failures, availability and other issues from a graphical user interface. That interface also allows us to [directly monitor](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-enable-app-insights#view-logs-in-the-studio) any elements logged in the entry script via the tool's traces table under the logs option. 
 
 
+## Architectural Diagram
+
+
+## Improving the Project in the Future
+
+As mentioned above, there are a few options to consider:
+- Improving the data: further cleaning and feature selection/engineering
+- Experimenting with other score metrics, or a combination, if possible: root mean square for comparison with r2 score
+- Trying a wider range of hyperparameters: A uniform range on max features, poisson criterion, deeper forests
+- Try other algorithms: XGBoost in HyperDrive (due to its boosting functionality) or use of Deep Learning models in either AutoML or HyperDrive
+
+
