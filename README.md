@@ -51,17 +51,40 @@ For the XGBoost algorithm, the parameters included:
 For the LightGBM algorithm, the only noted parameters included:
 - Minimum data in leaf: 20
 - Number of jobs (threads): 1
+ElasticNetCV was used as the meta-learner for the ensemble. Some of its parameters included:
+- Fit Intercept: True
+- L1 ration: 0.5
+- Max iterations: 1000
 
-In general, XGBoost is one of the best performing algorithms available for regression. Aside from running a much longer experiment involving more rigorous hyperparameter tuning, it is probably safe to assume that manually cleaning and feature selecting/engineering the data would have produced a much better result.
+In general, XGBoost is one of the better performing algorithms available for regression with this kind of data. For the sake of improvement, we could possibly run a much longer experiment, allowing AutoML to engage in more rigorous hyperparameter tuning. That said, it is probably safer to assume that manually cleaning and feature selecting/engineering the data would have produced a much better result.
 
 *TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
 
 ## Hyperparameter Tuning
-*TODO*: What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
+Following research into suitable models for price prediction (regression), several experiments were performed locally using various shallow models. Given the obvious tradeoff between power/cost and efficiency, in light of those experiments' outcomes, a RandomForestRegressor was chosen for the HyperDrive experiment. 
 
+Additional research into the most important parameters for that model (and local experiment results) led to the use of the ‘Number of Estimators’, ‘Max Depth’, ‘Criterion’ and ‘Max Features’ for hyperparameter tuning. Bayesian sampling was used for its optimized method of finding increasingly better combinations of parameters.
+
+As it were, the above-mentioned parameters lend themselves only to simple choice-based ranges:
+- Number of estimators: 10, 100
+- Max Depth: 2, 10, 30
+- Criterion : mse, mae - mean squared or absolute error
+- Max Features: sqrt, log2, auto (=n_features)
+
+The Max Features parameter could likely have been specified as a uniform range between floats, but that would have lost the default options (sqrt, log2, auto).
 
 ### Results
-*TODO*: What are the results you got with your model? What were the parameters of the model? How could you have improved it?
+As part of the HyperDrive experiment’s training script, the data was cleaned to some extent. It was also encoded, split and standardized, before feeding to the model for training. This preparation exercise was informed by review of the raw data features and their correlations, using a correlation map. 
+
+Correlation map here
+
+From 24 iterations, the HyperDrive experiment's best model yielded a ~96% R2 score. Its notable parameters were as follows:
+Number estimators: 100
+Max Depth: 100
+Criterion: mse
+Max Features: log2
+
+Without a doubt, the model could have been improved with more in-depth data preparation. Additionally, more rigorous hyperparameter tuning could have surfaced better models. The latter point was certainly a possibility but the observed training times were a prohibiting factor given the lab's time limitation.
 
 *TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
 
