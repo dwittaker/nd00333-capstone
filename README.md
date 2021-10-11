@@ -70,7 +70,7 @@ In general, XGBoost is one of the better performing algorithms available for reg
 ## Hyperparameter Tuning
 As part of the HyperDrive experiment’s training script, the data was cleaned to some extent. It was also encoded, split and standardized, for use in training. This preparation exercise was informed by review of the raw data features and their correlations, using a correlation map. 
 
-Correlation map here
+![Correlation Map](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_45.png)
 
 Following research into suitable models for price prediction (regression), several experiments were performed on the preprocessed data locally using various shallow models. Given the outcome of those experiments and the obvious tradeoff between power/cost and efficiency, a RandomForestRegressor was chosen for the HyperDrive experiment. 
 
@@ -181,9 +181,9 @@ In this instance, the entry script was modified to log relevant information upon
 While it was only monitored by pulling the logs directly in python, Azure's AppInsights interface allows us to review the performance, failures, availability and other issues from a graphical user interface. That interface also allows us to [directly monitor](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-enable-app-insights#view-logs-in-the-studio) any elements logged in the entry script via the tool's traces table under the logs option. 
 
 
-## Architectural Diagram
+## Process Flow Diagram
 
-[Process Diagram](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCAP_ML_Architecture.png)
+![Process Diagram](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCAP_ML_Architecture.png)
 
 ## Improving the Project in the Future
 
