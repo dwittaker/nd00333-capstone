@@ -127,31 +127,20 @@ ElasticNetCV was used as the meta-learner for the ensemble. Some of its paramete
 - L1 ration: 0.5
 - Max iterations: 1000
 
-The following shows the submission of the AutoML Experiment
+The RunWidget below shows the AutoML experiment upon completion. The table at the bottom is sorted to show the best metrics produced along with some of the parameters used.
 
-![AutoML Run](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_30.png)
+![AutoML RunWidget](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_29_prevrun.png)
 
-A printout of the AutoML models after completion
-
-![AutoML Experiment Models](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_41.png)
-
-The completed AutoML Experiment
-![AutoML Experiment Completed](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_42.png)
-
-ML Studio view of the Ensemble parameters for the best model
-![Best Model params](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_43.png)
-![Best Model params](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_44.png)
+This shows comparative R2 scores of the different runs
+![AutoML RunWidget](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_30_prevrun.png)
 
 The screenshots below show a Notebook printout of the details of the best run from the AutoML Experiment
 
-![Best Run params 1](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_31.png)
-![Best Run params 2](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_32.png)
-![Best Run params 3](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_33.png)
-![Best Run params 4](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_34.png)
-![Best Run params 5](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_35.png)
-![Best Run params 6](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_36.png)
-![Best Run params 7](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_37.png)
-![Best Run params 8](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_38.png)
+![Best Run params 1](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_31_prevrun.png)
+![Best Run params 2](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_32_prevrun.png)
+![Best Run params 3](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_33_prevrun.png)
+![Best Run params 4](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_34_prevrun.png)
+![Best Run params 5](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_35_prevrun.png)
 
 A printout of the explanations of feature importance, showing the most useful raw and engineered features
 
@@ -159,7 +148,7 @@ A printout of the explanations of feature importance, showing the most useful ra
 
 The model was then downloaded
 
-![Model Explanation](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_39.png)
+![Model Download](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_40.png)
 
 ### Future Improvements
 
