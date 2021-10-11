@@ -13,12 +13,15 @@ The project’s activities are performed in four phases, including:
 This is a general AzureML project and uses several different Azure and Azure ML SDK libraries, along with basic data processing libraries such as Pandas and Numpy and general Machine Learning libraries such as SciKitLearn.
 
 That said, the data is being retrieved from Kaggle's API and requires use of the opendatasets library, which can be installed via:
+
+```python
 !pip install opendatasets
 import opendatasets as od
+```
 
 For the purpose of testing or troubleshooting, one may consider the following:
-- Local install of Jupyter Notebook or plain python - test training HyperDrive script and general development without time limitation
-- Local install of [AzureML Inference Server tool](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-inference-server-http) - test web service entry script. 
+- Local install of Jupyter Notebook and/or Python - test training HyperDrive script and general development (without a time limitation)
+- Local install of [AzureML Inference Server tool](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-inference-server-http) - test web service entry/scoring script. 
 - Local install of Docker desktop - test web service container
 
 ## Dataset
