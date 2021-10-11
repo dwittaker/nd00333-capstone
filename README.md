@@ -12,11 +12,13 @@ The project’s activities are performed in four phases, including:
 ## Project Set Up and Installation
 This is a general AzureML project and uses several different Azure and Azure ML SDK libraries, along with basic data processing libraries such as Pandas and Numpy and general Machine Learning libraries such as SciKitLearn.
 
-That said, the data is being retrieved from Kaggle's API and requires use of the opendatasets library, which can be installed via:
+That said, the data is being retrieved from Kaggle's API and requires use of the [opendatasets](https://pypi.org/project/opendatasets/) library, which can be used as follows:
 
 ```python
 !pip install opendatasets
 import opendatasets as od
+dataset_url = 'https://www.kaggle.com/user/dataset'
+od.download(dataset_url)
 ```
 
 For the purpose of testing or troubleshooting, one may consider the following:
@@ -45,7 +47,7 @@ For timing, the experiment was set to run with 5 concurrent iteration runs for 1
 *In reality, the experiment was previously run for an hour a few times, which was later deemed unnecessary (The HyperDrive experiment always yielded better results).
 
 ### Results
-The AutoML experimented completed around 11 iterations with the best, a stack ensemble, topping out at ~92.6% R2 score. This ensemble was comprised of a XGBoostRegressor that was preprocessed using a standard scaler and a LightGBMRegressor that was preprocessed using a max absolute scaler. 
+The AutoML experiment completed around 11 iterations with the best, a stack ensemble, topping out at ~92.6% R2 score. This ensemble was comprised of a XGBoostRegressor that was preprocessed using a standard scaler and a LightGBMRegressor that was preprocessed using a max absolute scaler. 
 
 For the XGBoost algorithm, the parameters included:
 - Number of estimators: 100
@@ -66,37 +68,37 @@ In general, XGBoost is one of the better performing algorithms available for reg
 *TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
 
 ## Hyperparameter Tuning
-Following research into suitable models for price prediction (regression), several experiments were performed locally using various shallow models. Given the obvious tradeoff between power/cost and efficiency, in light of those experiments' outcomes, a RandomForestRegressor was chosen for the HyperDrive experiment. 
+As part of the HyperDrive experiment’s training script, the data was cleaned to some extent. It was also encoded, split and standardized, for use in training. This preparation exercise was informed by review of the raw data features and their correlations, using a correlation map. 
+
+Correlation map here
+
+Following research into suitable models for price prediction (regression), several experiments were performed on the preprocessed data locally using various shallow models. Given the outcome of those experiments and the obvious tradeoff between power/cost and efficiency, a RandomForestRegressor was chosen for the HyperDrive experiment. 
 
 Additional research into the most important parameters for that model (and local experiment results) led to the use of the ‘Number of Estimators’, ‘Max Depth’, ‘Criterion’ and ‘Max Features’ for hyperparameter tuning. Bayesian sampling was used for its optimized method of finding increasingly better combinations of parameters.
 
-As it were, the above-mentioned parameters lend themselves only to simple choice-based ranges:
+As it were, the above-mentioned parameters lend themselves only to simple choice-based ranges which were specified as follows:
 - Number of estimators: 10, 100
 - Max Depth: 2, 10, 30
 - Criterion : mse, mae - mean squared or absolute error
 - Max Features: sqrt, log2, auto (=n_features)
 
-The Max Features parameter could likely have been specified as a uniform range between floats, but that would have lost the default options (sqrt, log2, auto).
+The specifications for the numeric parameters were deliberately set to span the extremes. The Max Features parameter could likely have been specified as a uniform range between floats, but that would have lost the default options (sqrt, log2, auto).
 
 ### Results
-As part of the HyperDrive experiment’s training script, the data was cleaned to some extent. It was also encoded, split and standardized, before feeding to the model for training. This preparation exercise was informed by review of the raw data features and their correlations, using a correlation map. 
-
-Correlation map here
-
 From 24 iterations, the HyperDrive experiment's best model yielded a ~96% R2 score. Its notable parameters were as follows:
 Number estimators: 100
-Max Depth: 100
+Max Depth: 30
 Criterion: mse
 Max Features: log2
 
-Without a doubt, the model could have been improved with more in-depth data preparation. Additionally, more rigorous hyperparameter tuning could have surfaced better models. The latter point was certainly a possibility but the observed training times were a prohibiting factor given the lab's time limitation.
+Without a doubt, the model could have been improved with more in-depth data preparation. Additionally, more rigorous hyperparameter tuning could have surfaced better models. The latter point was certainly a possibility but the observed training times were a prohibiting factor given the lab's time limitation. A number of iterations (especially with estimators=100, max depth=30 and high # of max features) had to be manually cancelled due to lengthy training.
 
 *TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
 
 ## Model Deployment
 
 ### Metric
-R2 score was chosen as the primary metric due to observation of the spread of values of the target variable in the dataset. As noted by Microsoft’s [documentation](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-auto-train#metrics-for-regression-scenarios):
+The models from both experiments were evaluated based on R2 score, which was chosen as the primary metric after analysis of the spread of target variable values in the dataset. As noted by Microsoft’s [documentation](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-auto-train#metrics-for-regression-scenarios):
 > Metrics like r2_score and spearman_correlation can better represent the quality of model when the scale of the value-to-predict covers many orders of magnitude. For instance salary estimation, where many people have a salary of $20k to $100k, but the scale goes very high with some salaries in the $100M range.
 
 As such, the R2 score metric is applicable given the spread of car prices in the dataset. If the spread of car prices did not fit that scenario, normalized_root_mean_squared_error would have been used instead.
@@ -113,11 +115,13 @@ In this scenario, the software package dependencies included python, scikitlearn
 
 Finally, authentication was enabled, thereby requiring a key for interaction with the web service.
 
+** While 1gb of memory is usually sufficient in most cases, the size of the fitted model's joblib file was over 1gb in size. Specifying 1gb memory for the container caused the container to continually reboot (due to low memory), resulting in failed deployments and otherwise, an unhealthy web service. If a web service's deployment logs fail to provide useful or timely information (e.g. while awaiting container start), a deployment can be troubleshooted locally or via the Container instances section of the Azure portal, where one can review the logs associated with the container. Observing multiple instances of text similar to "Worker with pid XXX was terminated due to signal 9" suggests an out-of-memory problem, which manifests as continous reboots of the container.
+
 ### Usage
 
 The following is an example of 2 inputs that would be posted simultaneously to the scoring URI. In this scenario, we would like to predict the price of a 2018 Ford F-150 and a 2018 Toyota Corolla.
 
-The specified options are a stripped down set of the original features from the dataset. Once received by the entry script, some of these features (categorical options) would be encoded before feeding to the model for prediction. Both the input and the output would then be logged for reference.
+The specified options are a stripped down set of the original features from the dataset. Once received by the entry script, some of these features (categorical options) would be encoded just before feeding to the model for prediction. Both the input and the output would then be logged by the entry script, just before returning the output to the user.
 
 ```python
 data = {
@@ -163,10 +167,6 @@ headers['Authorization'] = f'Bearer {key}'
 resp = requests.post(scoring_uri, input_data, headers=headers)
 print(resp.text)
 ```
-
-
-** While 1gb of memory is usually sufficient in most cases, the size of the fitted model's joblib file was over 1gb in size. Specifying 1gb memory for the container caused the container to continually reboot (due to low memory), resulting in failed deployments and otherwise, an unhealthy web service. If a web service's deployment logs fail to provide useful or timely information, a deployment can be troubleshooted locally or via the Container instances section of the Azure portal, where one can review the logs associated with the container. Observing multiple instances of text similar to "Worker with pid XXX was terminated due to signal 9" suggests a low or out-of-memory problem, causing continous reboots of the container.
-
 
 ## Screen Recording
 
