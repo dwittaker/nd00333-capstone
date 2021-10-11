@@ -92,6 +92,12 @@ Without a doubt, the model could have been improved with more in-depth data prep
 
 ## Model Deployment
 
+### Metric
+R2 score was chosen as the primary metric due to observation of the spread of values of the target variable in the dataset. As noted by Microsoft’s [documentation](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-auto-train#metrics-for-regression-scenarios):
+> Metrics like r2_score and spearman_correlation can better represent the quality of model when the scale of the value-to-predict covers many orders of magnitude. For instance salary estimation, where many people have a salary of $20k to $100k, but the scale goes very high with some salaries in the $100M range.
+
+As such, the R2 score metric is applicable given the spread of car prices in the dataset. If the spread of car prices did not fit that scenario, normalized_root_mean_squared_error would have been used instead.
+
 ### Setup
 Based on the model score metrics of the AutoML and HyperDrive experiments, the best model was taken from the latter experiment for deployment as a web service. 
 
