@@ -15,6 +15,7 @@
 
 ## Overview
 [Top](#table-of-contents)
+
 In this project I use Azure’s Machine Learning services for the development (and deployment) of a model that can predict the prices of used motor vehicles in Canada (regression). This is based on the characteristics of the motor vehicles, their sellers and their locations.
 
 The project’s activities are performed in four phases, including:
@@ -285,7 +286,7 @@ Testing the Endpoint with sample data
 
 
 ## Standout Suggestions
-[^](#table-of-contents)
+[Top](#table-of-contents)
 
 App Insights was enabled for the deployed web service. This allows the administrator to monitor the web service's performance, its availability and any other information that is desired surrounding the use of the service. 
 
@@ -301,7 +302,7 @@ Performance page of the App Insights Tool after a few tests
 
 
 ## Improving the Project in the Future
-[^](#table-of-contents)
+[Top](#table-of-contents)
 
 As mentioned above, there are a few options to consider:
 - Improving the data: further cleaning and feature selection/engineering
