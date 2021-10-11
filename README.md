@@ -27,7 +27,7 @@ NB: Step 4 was done in a separate hyperparameter_tuning_deploy.ipynb workbook
 
 ## Screen Recording
 [Top](#table-of-contents)
-
+NB: The volume level seems to reduce briefly a couple of times
 [![here](https://img.youtube.com/vi/2RdAcl6C6bg/mqdefault.jpg)](https://youtu.be/2RdAcl6C6bg)
 
 ## Process Flow Diagram
