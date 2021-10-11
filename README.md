@@ -18,13 +18,13 @@ import opendatasets as od
 
 For the purpose of testing or troubleshooting, one may consider the following:
 - Local install of Jupyter Notebook or plain python - test training HyperDrive script and general development without time limitation
-- Local install of AzureML Inference Server tool - test web service entry script. https://docs.microsoft.com/en-us/azure/machine-learning/how-to-inference-server-http
+- Local install of [AzureML Inference Server tool](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-inference-server-http) - test web service entry script. 
 - Local install of Docker desktop - test web service container
 
 ## Dataset
 
 ### Overview
-To get things started, several datasets on Kaggle were reviewed for interest, usability, data quality and suitability in relation to the ultimate purpose. With that said, I settled on a used car listings dataset (credit: MarketCheck.com) which provides data for cars being sold on the US and Canadian markets. This data is scraped from 65k used car sales websites across North America. Given my location and personal interest, I chose to use the Canadian portion of that dataset. 
+To get things started, several datasets on Kaggle were reviewed for interest, usability, data quality and suitability in relation to the ultimate purpose. With that said, I settled on a [used car listings dataset](https://www.kaggle.com/rupeshraundal/marketcheck-automotive-data-us-canada) (credit: [MarketCheck.com](https://www.marketcheck.com/)) which provides data for cars being sold on the US and Canadian markets. This data is scraped from 65k used car sales websites across North America. Given my location and personal interest, I chose to use the Canadian portion of that dataset. 
 
 ### Task
 The car sales data will be used to try and predict the prices of used cars in Canada, by specifying some key attributes about the desired cars (such as their year, make, model, miles, trim, engine, vehicle type and fuel type), their seller and their location. That being said, for the AutoML experiment, the raw dataset was used for training, so as to avoid tainting the full potential of the AutoML toolset. For the HyperDrive experiment, several features were deemed unnecessary (e.g. VIN #, Stock #) and were removed. 
@@ -39,7 +39,7 @@ For timing, the experiment was set to run with 5 concurrent iteration runs for 1
 
 5-fold cross-validation was used to evaluate the results of the iterations and model explainability was enabled for the best model. This was used to get a better understanding of the more important features, whether raw or engineered.
 
-* In reality, the experiment was previously run for an hour a few times, which was later deemed unnecessary (The HyperDrive experiment always yielded better results).
+*In reality, the experiment was previously run for an hour a few times, which was later deemed unnecessary (The HyperDrive experiment always yielded better results).
 
 ### Results
 The AutoML experimented completed around 11 iterations with the best, a stack ensemble, topping out at ~92.6% R2 score. This ensemble was comprised of a XGBoostRegressor that was preprocessed using a standard scaler and a LightGBMRegressor that was preprocessed using a max absolute scaler. 
@@ -48,9 +48,11 @@ For the XGBoost algorithm, the parameters included:
 - Number of estimators: 100
 - Learning rate: 0.1
 - Max depth: 9
+
 For the LightGBM algorithm, the only noted parameters included:
 - Minimum data in leaf: 20
 - Number of jobs (threads): 1
+
 ElasticNetCV was used as the meta-learner for the ensemble. Some of its parameters included:
 - Fit Intercept: True
 - L1 ration: 0.5
@@ -167,6 +169,6 @@ App Insights was enabled for the deployed web service. This allows the administr
 
 In this instance, the entry script was modified to log relevant information upon each request, such as the inputs to the model and its outputs. Doing so provides the administrator with visibility on the model's behavior. 
 
-While it was only monitored by pulling the logs directly in python, Azure's AppInsights interface allows us to review the performance, failures, availability and other issues from a graphical user interface. That interface also allows us to monitor any elements logged in the entry script via the tool's traces table under the logs option. 
+While it was only monitored by pulling the logs directly in python, Azure's AppInsights interface allows us to review the performance, failures, availability and other issues from a graphical user interface. That interface also allows us to [directly monitor](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-enable-app-insights#view-logs-in-the-studio) any elements logged in the entry script via the tool's traces table under the logs option. 
 
-https://docs.microsoft.com/en-us/azure/machine-learning/how-to-enable-app-insights#view-logs-in-the-studio
+
