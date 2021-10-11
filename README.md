@@ -281,9 +281,20 @@ Retrieving Service Logs
 
 ![Service Logs](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_24.png)
 
+
 Testing the Endpoint with sample data
 
 ![Service Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_25.png)
+
+These 2 screenshots were captured from the Screencast as the latest Notebook may have been lost.
+
+Service Logs with logged input and output
+
+![Service Logs after Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_46.png)
+
+Deleting the Service 
+
+![Service Logs after Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_47.png)
 
 
 ## Standout Suggestions
