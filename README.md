@@ -8,6 +8,10 @@ The project’s activities are performed in four phases, including:
 3.	Use of Azure’s HyperDrive tool to perform hyperparameter tuning experiments and produce an optimal model
 4.	Deployment of the most optimal model (considering both experiments above) for consumption as an inference web service.
 
+## Screen Recording
+
+[![here](https://img.youtube.com/vi/2RdAcl6C6bg/mqdefault.jpg)](https://youtu.be/2RdAcl6C6bg)
+
 
 ## Project Set Up and Installation
 
@@ -248,13 +252,10 @@ Retrieving Service Logs
 
 ![Service Logs](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_24.png)
 
-Testing the Endpoing with sample data
+Testing the Endpoint with sample data
 
 ![Service Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_25.png)
 
-## Screen Recording
-
-[![here](https://img.youtube.com/vi/2RdAcl6C6bg/mqdefault.jpg)](https://youtu.be/2RdAcl6C6bg)
 
 ## Standout Suggestions
 
