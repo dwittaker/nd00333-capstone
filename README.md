@@ -285,7 +285,7 @@ Testing the Endpoint with sample data
 
 
 ## Standout Suggestions
-[Top](#table-of-contents)
+[^](#table-of-contents)
 
 App Insights was enabled for the deployed web service. This allows the administrator to monitor the web service's performance, its availability and any other information that is desired surrounding the use of the service. 
 
@@ -301,6 +301,7 @@ Performance page of the App Insights Tool after a few tests
 
 
 ## Improving the Project in the Future
+[^](#table-of-contents)
 
 As mentioned above, there are a few options to consider:
 - Improving the data: further cleaning and feature selection/engineering
