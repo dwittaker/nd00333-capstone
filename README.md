@@ -314,11 +314,7 @@ Deleting the Service
 ## Standout Suggestions
 [Top](#table-of-contents)
 
-App Insights was enabled for the deployed web service. This allows the administrator to monitor the web service's performance, its availability and any other information that is desired surrounding the use of the service. 
-
-In this instance, the entry script was modified to log relevant information upon each request, such as the inputs to the model and its outputs. Doing so provides the administrator with visibility on the model's behavior. 
-
-While it was only monitored by pulling the logs directly in python, Azure's AppInsights interface allows us to review the performance, failures, availability and other issues from a graphical user interface. That interface also allows us to [directly monitor](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-enable-app-insights#view-logs-in-the-studio) any elements logged in the entry script via the tool's traces table under the logs option. 
+While we can easily pull the basic logs directly in python, App Insights was enabled for the deployed web service. This tool provides us with a simple graphical interface that we use to monitor the web service's performance, request failures, its availability and any other information that is desired surrounding the use of the service. 
 
 Overview page of the App Insights User Interface
 
@@ -328,7 +324,11 @@ Performance page of the App Insights Tool after a few tests
 
 ![App Insights Performance Page](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_27_new.png)
 
-In-Depth Logging via Traces section
+In this instance, the entry script was modified to log relevant information upon each request, such as the inputs to the model and its outputs. Doing so gives us visibility on the model's behavior. 
+
+AppInsights provides a simple log query interface that also allows us to [directly monitor](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-enable-app-insights#view-logs-in-the-studio) any elements logged in the entry script via the tool's traces table under the logs option. This allows us more granularity in combing through our application's logs. As you can see in the screenshots below, the tool breaks down the inputs and outputs as well as provides a timestamp of the request and other information regarding the client making the request.
+
+In-Depth Logging via the Traces section
 
 ![App Insights Traces](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_27_new_2.png)
 ![App Insights Traces](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_27_new_3.png)
