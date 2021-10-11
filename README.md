@@ -51,37 +51,6 @@ Print out of the data being downloaded in the notebook
 The registered dataset in AzureML Studio
 ![The Registered Dataset](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_02.png)
 
-## Automated ML
-The AutoML Experiment was configured to run a regression experiment on the raw data where the price column is to be predicted based on the other columns. Featurization was enabled, allowing AutoML to autonomously perform data preparation steps including developing its own features for use along with the raw features.
-
-For timing, the experiment was set to run with 5 concurrent iteration runs for 15* minutes overall with an individual iteration timeout of 10 minutes and with early stopping enabled. The early stopping iterations was limited to 5 to stop the experiment if only 5 iterations failed to improve on the score. This was done bearing in mind that AzureML's early stopping feature starts calculating after the first 20 iterations by default. Therefore, 25 experiments is the earliest time at which the experiment would be terminated early, albeit with 2 additional ensemble iterations being subsequently added.
-
-5-fold cross-validation was used to evaluate the results of the iterations and model explainability was enabled for the best model. This was used to get a better understanding of the more important features, whether raw or engineered.
-
-*In reality, the experiment was previously run for an hour a few times, which was later deemed unnecessary (The HyperDrive experiment always yielded better results).
-
-### Results
-The AutoML experiment completed around 11 iterations with the best, a stack ensemble, topping out at ~92.6% R2 score. This ensemble was comprised of a XGBoostRegressor that was preprocessed using a standard scaler and a LightGBMRegressor that was preprocessed using a max absolute scaler. 
-
-For the XGBoost algorithm, the parameters included:
-- Number of estimators: 100
-- Learning rate: 0.1
-- Max depth: 9
-
-For the LightGBM algorithm, the only noted parameters included:
-- Minimum data in leaf: 20
-- Number of jobs (threads): 1
-
-ElasticNetCV was used as the meta-learner for the ensemble. Some of its parameters included:
-- Fit Intercept: True
-- L1 ration: 0.5
-- Max iterations: 1000
-
-### Future Improvements
-
-In general, XGBoost is one of the better performing algorithms available for regression with this kind of data. For the sake of improvement, we could possibly run a much longer experiment, allowing AutoML to engage in more rigorous hyperparameter tuning. That said, it is probably safer to assume that manually cleaning and feature selecting/engineering the data would have produced a much better result.
-
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
 
 ## Hyperparameter Tuning
 As part of the HyperDrive experiment’s training script, the data was cleaned to some extent. It was also encoded, split and standardized, for use in training. This preparation exercise was informed by review of the raw data features and their correlations, using a correlation map. 
@@ -124,11 +93,81 @@ The Best Run was retrieved from the HyperDrive experiment and used to display th
 ![Best Run Parameters](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_14.png)
 
 The best model is downloaded and the Model's details are printed
+
 ![Best Model Download and Model Properties](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_15.png)
 
 ### Future Improvements
 
 Without a doubt, the model could have been improved with more in-depth data preparation. Additionally, more rigorous hyperparameter tuning could have surfaced better models. The latter point was certainly a possibility but the observed training times were a prohibiting factor given the lab's time limitation. A number of iterations (especially with estimators=100, max depth=30 and high # of max features) had to be manually cancelled due to lengthy training.
+
+
+## Automated ML
+The AutoML Experiment was configured to run a regression experiment on the raw data where the price column is to be predicted based on the other columns. Featurization was enabled, allowing AutoML to autonomously perform data preparation steps including developing its own features for use along with the raw features.
+
+For timing, the experiment was set to run with 5 concurrent iteration runs for 15* minutes overall with an individual iteration timeout of 10 minutes and with early stopping enabled. The early stopping iterations was limited to 5 to stop the experiment if only 5 iterations failed to improve on the score. This was done bearing in mind that AzureML's early stopping feature starts calculating after the first 20 iterations by default. Therefore, 25 experiments is the earliest time at which the experiment would be terminated early, albeit with 2 additional ensemble iterations being subsequently added.
+
+5-fold cross-validation was used to evaluate the results of the iterations and model explainability was enabled for the best model. This was used to get a better understanding of the more important features, whether raw or engineered.
+
+*In reality, the experiment was previously run for an hour a few times, which was later deemed unnecessary (The HyperDrive experiment always yielded better results).
+
+### Results
+The AutoML experiment completed around 11 iterations with the best, a stack ensemble, topping out at ~92.6% R2 score. This ensemble was comprised of a XGBoostRegressor that was preprocessed using a standard scaler and a LightGBMRegressor that was preprocessed using a max absolute scaler. 
+
+For the XGBoost algorithm, the parameters included:
+- Number of estimators: 100
+- Learning rate: 0.1
+- Max depth: 9
+
+For the LightGBM algorithm, the only noted parameters included:
+- Minimum data in leaf: 20
+- Number of jobs (threads): 1
+
+ElasticNetCV was used as the meta-learner for the ensemble. Some of its parameters included:
+- Fit Intercept: True
+- L1 ration: 0.5
+- Max iterations: 1000
+
+The following shows the submission of the AutoML Experiment
+
+![AutoML Run](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_30.png)
+
+A printout of the AutoML models after completion
+
+![AutoML Experiment Models](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_41.png)
+
+The completed AutoML Experiment
+![AutoML Experiment Completed](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_42.png)
+
+ML Studio view of the Ensemble parameters for the best model
+![Best Model params](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_43.png)
+![Best Model params](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_44.png)
+
+The screenshots below show a Notebook printout of the details of the best run from the AutoML Experiment
+
+![Best Run params 1](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_31.png)
+![Best Run params 2](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_32.png)
+![Best Run params 3](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_33.png)
+![Best Run params 4](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_34.png)
+![Best Run params 5](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_35.png)
+![Best Run params 6](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_36.png)
+![Best Run params 7](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_37.png)
+![Best Run params 8](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_38.png)
+
+A printout of the explanations of feature importance, showing the most useful raw and engineered features
+
+![Model Explanation](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_39.png)
+
+The model was then downloaded
+
+![Model Explanation](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_39.png)
+
+### Future Improvements
+
+In general, XGBoost is one of the better performing algorithms available for regression with this kind of data. For the sake of improvement, we could possibly run a much longer experiment, allowing AutoML to engage in more rigorous hyperparameter tuning. That said, it is probably safer to assume that manually cleaning and feature selecting/engineering the data would have produced a much better result.
+
+*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
+
+
 
 
 ## Model Deployment
@@ -145,9 +184,11 @@ Based on the scoring metrics of the AutoML and HyperDrive experiments, the best 
 ![Register Model](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_16.png)
 
 The registered model in AzureML Studio
+
 ![Registered Model](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_17.png)
 
 The model file stored as an artifact
+
 ![Model File Artifact](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_18.png)
 
 ### Setup
@@ -218,9 +259,11 @@ print(resp.text)
 
 
 Retrieving Service Logs
+
 ![Service Logs](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_24.png)
 
 Testing the Endpoing with sample data
+
 ![Service Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_25.png)
 
 ## Screen Recording
