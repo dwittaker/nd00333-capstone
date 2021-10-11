@@ -288,13 +288,13 @@ Testing the Endpoint with sample data
 
 These 2 screenshots were captured from the Screencast as the latest Notebook may have been lost.
 
-Service Logs with logged input and output
+Service Logs with logged input and output from screencast test
 
-![Service Logs after Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_46.png)
+![Service Logs after Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_46_2.png)
 
 Deleting the Service 
 
-![Service Logs after Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_47.png)
+![Service Logs after Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_47_2.png)
 
 
 ## Standout Suggestions
