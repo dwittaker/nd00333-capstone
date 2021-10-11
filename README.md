@@ -157,6 +157,7 @@ ElasticNetCV was used as the meta-learner for the ensemble. Some of its paramete
 - L1 ration: 0.5
 - Max iterations: 1000
 
+NB: The automl widget screenshots below are from a run previous to the one in the notebook, as the runwidget screenshot wasn't captured during that last experiment run. The parameters and results are the same.
 The RunWidget below shows the AutoML experiment upon completion. The table at the bottom is sorted to show the best metrics produced along with some of the parameters used.
 
 ![AutoML RunWidget](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_29_prevrun.png)
