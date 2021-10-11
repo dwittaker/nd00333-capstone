@@ -89,13 +89,84 @@ Without a doubt, the model could have been improved with more in-depth data prep
 *TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
 
 ## Model Deployment
-*TODO*: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
+
+### Setup
+Based on the model score metrics of the AutoML and HyperDrive experiments, the best model was taken from the latter experiment for deployment as a web service. 
+
+As the deployed model will run from within a container that operates as a web server, we must provide:
+- An entry script that will receive (and preprocess) inputs from the endpoint, use our model to make a prediction and return outputs
+- The set of software packages (conda or pip based) that will need to be installed in order for the script to run
+- Information about the deployment including compute and security requirements
+
+In this scenario, the software package dependencies included python, scikitlearn, pandas, joblib and azureml defaults (responsible for the web server). The  deployment was made using an Azure Container Instance with 1 cpu core and 3gb of memory **. 
+
+Finally, authentication was enabled, thereby requiring a key for interaction with the web service.
+
+### Usage
+
+The following is an example of 2 inputs that would be posted simultaneously to the scoring URI. In this scenario, we would like to predict the price of a 2018 Ford F-150 and a 2018 Toyota Corolla.
+
+The specified options are a stripped down set of the original features from the dataset. Once received by the entry script, some of these features (categorical options) would be encoded before feeding to the model for prediction. Both the input and the output would then be logged for reference.
+
+```
+data = {
+    "data":
+    [
+        {
+            'miles': "51000",
+            'year': "2018",
+            'make': "Ford",
+            'model': "F-150",
+            'engine_size': "5",
+            'body_type': "Pickup",
+            'vehicle_type': "Truck",
+            'drivetrain': "4WD",
+            'transmission': "Automatic",
+            'fuel_type': "Gas",
+            'state': "ON"
+        }
+    ,
+        {
+            'miles': "58900",
+            'year': "2018",
+            'make': "Toyota",
+            'model': "Corolla",
+            'engine_size': "1.8",
+            'body_type': "Sedan",
+            'vehicle_type': "Car",
+            'drivetrain': "FWD",
+            'transmission': "Automatic",
+            'fuel_type': "Gas",
+            'state': "AB"
+        }       
+    ]
+}
+# Convert to JSON string
+input_data = json.dumps(data)
+# Set the content type
+headers = {'Content-Type': 'application/json'}
+# If authentication is enabled, set the authorization header
+headers['Authorization'] = f'Bearer {key}'
+
+# Make the request and display the response
+resp = requests.post(scoring_uri, input_data, headers=headers)
+print(resp.text)
+```
+
+
+** While 1gb of memory is usually sufficient in most cases, the size of the fitted model's joblib file was over 1gb in size. Specifying 1gb memory for the container caused the container to continually reboot (due to low memory), resulting in failed deployments and otherwise, an unhealthy web service. If a web service's deployment logs fail to provide useful or timely information, a deployment can be troubleshooted locally or via the Container instances section of the Azure portal, where one can review the logs associated with the container. Observing multiple instances of text similar to "Worker with pid XXX was terminated due to signal 9" suggests a low or out-of-memory problem, causing continous reboots of the container.
+
 
 ## Screen Recording
-*TODO* Provide a link to a screen recording of the project in action. Remember that the screencast should demonstrate:
-- A working model
-- Demo of the deployed  model
-- Demo of a sample request sent to the endpoint and its response
+
+[![here](https://img.youtube.com/vi/2RdAcl6C6bg/mqdefault.jpg)](https://youtu.be/2RdAcl6C6bg)
 
 ## Standout Suggestions
-*TODO (Optional):* This is where you can provide information about any standout suggestions that you have attempted.
+
+App Insights was enabled for the deployed web service. This allows the administrator to monitor the web service's performance, its availability and any other information that is desired surrounding the use of the service. 
+
+In this instance, the entry script was modified to log relevant information upon each request, such as the inputs to the model and its outputs. Doing so provides the administrator with visibility on the model's behavior. 
+
+While it was only monitored by pulling the logs directly in python, Azure's AppInsights interface allows us to review the performance, failures, availability and other issues from a graphical user interface. That interface also allows us to monitor any elements logged in the entry script via the tool's traces table under the logs option. 
+
+https://docs.microsoft.com/en-us/azure/machine-learning/how-to-enable-app-insights#view-logs-in-the-studio
