@@ -183,6 +183,7 @@ While it was only monitored by pulling the logs directly in python, Azure's AppI
 
 ## Architectural Diagram
 
+[Process Diagram](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCAP_ML_Architecture.png)
 
 ## Improving the Project in the Future
 
