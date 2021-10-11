@@ -70,7 +70,7 @@ In general, XGBoost is one of the better performing algorithms available for reg
 ## Hyperparameter Tuning
 As part of the HyperDrive experiment’s training script, the data was cleaned to some extent. It was also encoded, split and standardized, for use in training. This preparation exercise was informed by review of the raw data features and their correlations, using a correlation map. 
 
-![Correlation Map](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_45.jpg)
+<img src="https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_45.jpg" alt="Correlation Map" width="75%" height="75%">
 
 Following research into suitable models for price prediction (regression), several experiments were performed on the preprocessed data locally using various shallow models. Given the outcome of those experiments and the obvious tradeoff between power/cost and efficiency, a RandomForestRegressor was chosen for the HyperDrive experiment. 
 
