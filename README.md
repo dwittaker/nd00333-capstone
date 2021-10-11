@@ -115,7 +115,6 @@ The AutoML experiment completed around 11 iterations with the best, a stack ense
 
 For the XGBoost algorithm, the parameters included:
 - Number of estimators: 100
-- Learning rate: 0.1
 - Max depth: 9
 
 For the LightGBM algorithm, the only noted parameters included:
@@ -153,8 +152,6 @@ The model was then downloaded
 ### Future Improvements
 
 In general, XGBoost is one of the better performing algorithms available for regression with this kind of data. For the sake of improvement, we could possibly run a much longer experiment, allowing AutoML to engage in more rigorous hyperparameter tuning. That said, it is probably safer to assume that manually cleaning and feature selecting/engineering the data would have produced a much better result.
-
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
 
 
 
