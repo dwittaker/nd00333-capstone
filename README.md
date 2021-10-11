@@ -10,6 +10,8 @@ The project’s activities are performed in four phases, including:
 
 
 ## Project Set Up and Installation
+
+### Packages
 This is a general AzureML project and uses several different Azure and Azure ML SDK libraries, along with basic data processing libraries such as Pandas and Numpy and general Machine Learning libraries such as SciKitLearn.
 
 That said, the data is being retrieved from Kaggle's API and requires use of the [opendatasets](https://pypi.org/project/opendatasets/) library, which can be used as follows:
@@ -20,11 +22,17 @@ import opendatasets as od
 dataset_url = 'https://www.kaggle.com/user/dataset'
 od.download(dataset_url)
 ```
-
+### Local setup for work and troubleshooting
 For the purpose of testing or troubleshooting, one may consider the following:
 - Local install of Jupyter Notebook and/or Python - test training HyperDrive script and general development (without a time limitation)
 - Local install of [AzureML Inference Server tool](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-inference-server-http) - test web service entry/scoring script. 
 - Local install of Docker desktop - test web service container
+
+### Compute
+For the purpose of running training activities in parallel, a compute cluster is configured with 3 nodes minimum and 6 nodes maximum with 10 minute idle time for scale down.
+
+![Compute](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_03.png)
+
 
 ## Dataset
 
@@ -36,6 +44,12 @@ The car sales data will be used to try and predict the prices of used cars in Ca
 
 ### Access
 Using the Kaggle API, the data was downloaded locally using the opendatasets library which only requires a Kaggle username and key for authentication. Using the Azure SDK, it was then uploaded to the default datastore and converted to a tabular dataset which was then registered in the workspace. This allowed the data to be accessible from all experiments.
+
+Print out of the data being downloaded in the notebook
+![Accessing the Data](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_01.png)
+
+The registered dataset in AzureML Studio
+![The Registered Dataset](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_02.png)
 
 ## Automated ML
 The AutoML Experiment was configured to run a regression experiment on the raw data where the price column is to be predicted based on the other columns. Featurization was enabled, allowing AutoML to autonomously perform data preparation steps including developing its own features for use along with the raw features.
@@ -62,6 +76,8 @@ ElasticNetCV was used as the meta-learner for the ensemble. Some of its paramete
 - Fit Intercept: True
 - L1 ration: 0.5
 - Max iterations: 1000
+
+### Future Improvements
 
 In general, XGBoost is one of the better performing algorithms available for regression with this kind of data. For the sake of improvement, we could possibly run a much longer experiment, allowing AutoML to engage in more rigorous hyperparameter tuning. That said, it is probably safer to assume that manually cleaning and feature selecting/engineering the data would have produced a much better result.
 
@@ -91,9 +107,29 @@ Max Depth: 30
 Criterion: mse
 Max Features: log2
 
+The RunWidget below shows the HyperDrive experiment in its final stages, as noted by the logs in the top right corner. The table at the bottom is sorted to show the best metrics produced along with some of the parameters used.
+![HyperDrive RunWidget](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_07.png)
+
+The experiment's view in ML Studio shows a better list of the runs with their metrics and the parameters used.
+![HyperDrive RunWidget](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_11.png)
+
+The completed experiment showing the range of parameters used for Bayesian optimization
+![HyperDrive RunWidget](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_12.png)
+
+A graphical representation portraying the parameter settings in use along with the produced R2 score. This provides a good idea of the more useful hyperparameter settings, such as using mse with higher max depth.
+![Parallel Coordinate](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_10.png)
+
+The Best Run was retrieved from the HyperDrive experiment and used to display the associated (best) model's parameters and other properties
+![Getting the Best Run](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_13.png)
+![Best Run Parameters](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_14.png)
+
+The best model is downloaded and the Model's details are printed
+![Best Model Download and Model Properties](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_15.png)
+
+### Future Improvements
+
 Without a doubt, the model could have been improved with more in-depth data preparation. Additionally, more rigorous hyperparameter tuning could have surfaced better models. The latter point was certainly a possibility but the observed training times were a prohibiting factor given the lab's time limitation. A number of iterations (especially with estimators=100, max depth=30 and high # of max features) had to be manually cancelled due to lengthy training.
 
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
 
 ## Model Deployment
 
@@ -103,9 +139,18 @@ The models from both experiments were evaluated based on R2 score, which was cho
 
 As such, the R2 score metric is applicable given the spread of car prices in the dataset. If the spread of car prices did not fit that scenario, normalized_root_mean_squared_error would have been used instead.
 
-### Setup
-Based on the model score metrics of the AutoML and HyperDrive experiments, the best model was taken from the latter experiment for deployment as a web service. 
+### Registering the Model
+Based on the scoring metrics of the AutoML and HyperDrive experiments, the best model was taken from the latter experiment for deployment as a web service. The model was then registered.
 
+![Register Model](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_16.png)
+
+The registered model in AzureML Studio
+![Registered Model](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_17.png)
+
+The model file stored as an artifact
+![Model File Artifact](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_18.png)
+
+### Setup
 As the deployed model will run from within a container that operates as a web server, we must provide:
 - An entry script that will receive (and preprocess) inputs from the endpoint, use our model to make a prediction and return outputs
 - The set of software packages (conda or pip based) that will need to be installed in order for the script to run
@@ -116,6 +161,9 @@ In this scenario, the software package dependencies included python, scikitlearn
 Finally, authentication was enabled, thereby requiring a key for interaction with the web service.
 
 ** While 1gb of memory is usually sufficient in most cases, the size of the fitted model's joblib file was over 1gb in size. Specifying 1gb memory for the container caused the container to continually reboot (due to low memory), resulting in failed deployments and otherwise, an unhealthy web service. If a web service's deployment logs fail to provide useful or timely information (e.g. while awaiting container start), a deployment can be troubleshooted locally or via the Container instances section of the Azure portal, where one can review the logs associated with the container. Observing multiple instances of text similar to "Worker with pid XXX was terminated due to signal 9" suggests an out-of-memory problem, which manifests as continous reboots of the container.
+
+Checking the state of the deployment, retrieving the urls and keys and enabling app insight
+![Service State](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_23.png)
 
 ### Usage
 
@@ -168,6 +216,13 @@ resp = requests.post(scoring_uri, input_data, headers=headers)
 print(resp.text)
 ```
 
+
+Retrieving Service Logs
+![Service Logs](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_24.png)
+
+Testing the Endpoing with sample data
+![Service Test](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_25.png)
+
 ## Screen Recording
 
 [![here](https://img.youtube.com/vi/2RdAcl6C6bg/mqdefault.jpg)](https://youtu.be/2RdAcl6C6bg)
@@ -180,6 +235,11 @@ In this instance, the entry script was modified to log relevant information upon
 
 While it was only monitored by pulling the logs directly in python, Azure's AppInsights interface allows us to review the performance, failures, availability and other issues from a graphical user interface. That interface also allows us to [directly monitor](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-enable-app-insights#view-logs-in-the-studio) any elements logged in the entry script via the tool's traces table under the logs option. 
 
+Overview page of the App Insights User Interface
+![App Insight Overview](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_26.png)
+
+Performance page of the App Insights Tool after a few tests
+![App Insights Performance Page](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_27.png)
 
 ## Process Flow Diagram
 
