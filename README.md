@@ -110,7 +110,7 @@ The following is an example of 2 inputs that would be posted simultaneously to t
 
 The specified options are a stripped down set of the original features from the dataset. Once received by the entry script, some of these features (categorical options) would be encoded before feeding to the model for prediction. Both the input and the output would then be logged for reference.
 
-```
+```python
 data = {
     "data":
     [
