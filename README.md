@@ -1,4 +1,19 @@
+# Table of Contents
+- [Overview](#overview)
+- [Screencast](#screen-recording)
+- [Process Flow](#process-flow-diagram)
+- [Project Set Up and Installation](#project-set-up-and-installation)
+- [Dataset](#dataset)
+- [Hyperparameter Tuning](#hyperparameter-tuning)
+- [Automated ML](#automated-ml)
+- [Model Deployment](#model-deployment)
+- [Standout Suggestions](#standout-suggestions)
+- [Improving the Project in the Future](#improving-the-project-in-the-future)
+
+
 # Prediction of Used Motor Vehicle Prices
+
+## Overview
 
 In this project I use Azure’s Machine Learning services for the development (and deployment) of a model that can predict the prices of used motor vehicles in Canada (regression). This is based on the characteristics of the motor vehicles, their sellers and their locations.
 
@@ -12,6 +27,9 @@ The project’s activities are performed in four phases, including:
 
 [![here](https://img.youtube.com/vi/2RdAcl6C6bg/mqdefault.jpg)](https://youtu.be/2RdAcl6C6bg)
 
+## Process Flow Diagram
+
+![Process Diagram](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCAP_ML_Architecture.png)
 
 ## Project Set Up and Installation
 
@@ -271,9 +289,6 @@ Overview page of the App Insights User Interface
 Performance page of the App Insights Tool after a few tests
 ![App Insights Performance Page](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCap_Img_27.png)
 
-## Process Flow Diagram
-
-![Process Diagram](https://github.com/dwittaker/nd00333-capstone/blob/main/images/PCAP_ML_Architecture.png)
 
 ## Improving the Project in the Future
 
